@@ -136,6 +136,6 @@ function App() {
       {console.log(count, plots, 'count plots')}
     </Wrapper>
   );
-}
+};
 
 export default App;
