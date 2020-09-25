@@ -3,19 +3,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUndo } from '@fortawesome/free-solid-svg-icons';
 import Styled from 'styled-components';
 import Header from './components/Header.jsx';
-import { LineChart, Line } from 'recharts';
+import Chart from './components/Chart.jsx';
 
-const data = [{name: 'Page A', uv: 400, pv: 2400, amt: 2400}];
-
-const Chart = (
-  <LineChart width={600} height={383} data={data}>
-    <Line type="monotone" dataKey="uv" stroke="#8884d8" />
-  </LineChart>
-);
 
 const Wrapper = Styled.div`
   width: 600px;
+  height: 650px;
   border: 2px solid pink;
+`;
+
+const H2Container = Styled.div`
 `;
 
 const Tile = Styled.div`
@@ -62,12 +59,14 @@ const StartButtonContainer = Styled.div`
 const StartButton = Styled.button`
   width: 64px;
   height: 48px;
+  color: white;
+  background: #357b78;
+  border-radius: 5px;
+  border: none;
   font-family: Open Sans, sans-serif;
 
   ${({ active }) => active && `
     width: 48px;
-    color: white;
-    background: #357b78;
   `}
 `;
 
@@ -113,7 +112,9 @@ function App() {
       <Tile>
       
 
-        <ChartContainer>{Chart}</ChartContainer>
+        <ChartContainer>
+          <Chart />
+        </ChartContainer>
 
         <ButtonsContainer active={(count > 0)}>
           <UndoButtonContainer>
