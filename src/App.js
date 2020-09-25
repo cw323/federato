@@ -5,34 +5,34 @@ import Styled from 'styled-components';
 import Header from './components/Header.jsx';
 import Chart from './components/Chart.jsx';
 
-
 const Wrapper = Styled.div`
   width: 600px;
-  height: 650px;
-  border: 2px solid pink;
+  border: 2px solid #dedede;
 `;
 
 const H2Container = Styled.div`
+  background-color: #dedede;
+  padding-top: 1px;
+  padding-bottom: 1px;
 `;
 
 const Tile = Styled.div`
   width: 600px;
   height: 495px;
-  padding-bottom: 64px;
-  border: 2px solid black;
+  // border: 2px solid black;
 `;
 
 const ChartContainer = Styled.div`
-  width: 600px;
-  height: 319px;
-  border: 2px solid blue;
-  padding-bottom: 64px;
+  position: relative;
+  // border: 2px solid blue;
 `;
 
 const ButtonsContainer = Styled.div`
   display: flex;
   padding-left: 230px;
   padding-right: 230px;
+  padding-top: 64px;
+  padding-bottom: 64px;
 
   ${({ active }) => active && `
     padding-left: 170px;
@@ -52,7 +52,6 @@ const UndoButton = Styled.button`
 `;
 
 const StartButtonContainer = Styled.div`
-  // padding-left: 12px;
   padding-right: 6px;
 `;
 
@@ -88,34 +87,40 @@ const ResetButton = Styled.button`
 
 function App() {
   const [count, setCount] = useState(0);
-  const [plot, setPlot, getPlot] = useState([]); // find a way to make plot points better
+  const [plots, setPlots] = useState([]);
 
   const undo = () => {
-    setCount(count - 1);
-    // find a way to filter plot
-    setPlot(plot.filter(e => e !== [e, e]));
+    let prevCount = count;
+    let newCount = count - 1;
+    setCount(newCount);
+    setPlots(plots.filter(item => item.key !== count));
   };
 
   const addPlot = () => {
+    let dateObj = new Date();
+    let month = dateObj.getUTCMonth() + 1; //months from 1-12
+    let day = dateObj.getUTCDate();
+    let year = dateObj.getUTCFullYear();
+    let newDate = `${month}/${day}/${year}`;
+
     setCount(count + 1);
-    setPlot(plot => [...plot, [count + 1, count + 1]]);
+    setPlots(plots => [...plots, {x: count + 1, y: count + 1, key: count + 1, date: newDate}]);
   };
 
   const reset = () => {
     setCount(0);
-    setPlot([]);
+    setPlots([]);
   };
 
   return (
     <Wrapper>
-      <Header />
+      <H2Container>
+        <Header />
+      </H2Container>
       <Tile>
-      
-
         <ChartContainer>
-          <Chart />
+          <Chart data={plots} />
         </ChartContainer>
-
         <ButtonsContainer active={(count > 0)}>
           <UndoButtonContainer>
             {count > 0 && <UndoButton onClick={undo}><FontAwesomeIcon icon={faUndo} /></UndoButton>}
@@ -128,6 +133,7 @@ function App() {
           </ResetButtonContainer>
         </ButtonsContainer>
       </Tile>
+      {console.log(count, plots, 'count plots')}
     </Wrapper>
   );
 }
